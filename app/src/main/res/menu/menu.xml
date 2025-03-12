@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_reconocimiento"
+            android:icon="@mipmap/ic_reconocimiento"
+            android:title="Reconocimiento" />
+        <item
+            android:id="@+id/nav_googleMaps"
+            android:icon="@mipmap/ic_googlemaps"
+            android:title="Google Maps" />
+        <item
+            android:id="@+id/nav_waze"
+            android:icon="@mipmap/ic_waze"
+            android:title="Waze" />
+    </group>
+</menu>

@@ -7,7 +7,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class WazeActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,7 +16,7 @@ public class WazeActivity extends AppCompatActivity {
         String lon = "-84.087502"; // Longitude
 
         // Waze URI
-        String uri = "https://waze.com/ul?ll=" + lat + "," + lon + "&navigate=yes";
+        String uri = "waze://?ll=" + lat + "," + lon + "&navigate=yes";
 
         // Create the intent
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
@@ -27,11 +26,19 @@ public class WazeActivity extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            // If Waze is not installed, show a message
-            Toast.makeText(this, "Waze is not installed", Toast.LENGTH_SHORT).show();
+            // If Waze is not installed, show a message and redirect to Play Store
+            Toast.makeText(this, "Waze is not installed, redirecting to Play Store", Toast.LENGTH_SHORT).show();
+            Intent playStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.waze"));
+            if (playStoreIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(playStoreIntent);
+            } else {
+                // If Play Store is not available, open the web version
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.waze"));
+                startActivity(webIntent);
+            }
         }
 
-        // Finish activity so it doesn't stay open
+        // Finish the activity to prevent it from staying in the back stack
         finish();
     }
 }

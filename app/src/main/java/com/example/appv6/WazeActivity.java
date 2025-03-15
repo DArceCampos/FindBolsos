@@ -1,11 +1,5 @@
 package com.example.appv6;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,15 +12,15 @@ public class WazeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Define the specific location (Eiffel Tower, Paris, France)
-        String location = "Eiffel Tower, Paris, France";
-        redirectToWaze(location);
+        // Search for "backpack shops near me"
+        String searchQuery = "backpack shops near me";
+        redirectToWaze(searchQuery);
     }
 
-    private void redirectToWaze(String location) {
+    private void redirectToWaze(String query) {
         try {
-            // Create a URI for the location
-            String url = "https://waze.com/ul?q=" + Uri.encode(location);
+            // Create a URI for the search query
+            String url = "https://waze.com/ul?q=" + Uri.encode(query);
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {

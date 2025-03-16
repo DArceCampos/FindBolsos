@@ -51,7 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        Places.initialize(getApplicationContext(), "AIzaSyDDH1tJ8J4lKjKVapzjPyRLz0f06djNSqs");
+        Places.initialize(getApplicationContext(), "AIzaSyBia8i4Pnz0snGSEgWE9gn4B4u9BMc590Q");
         placesClient = Places.createClient(this);
 
     }
@@ -108,7 +108,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onSuccess(FindCurrentPlaceResponse response) {
                 for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
                     Place place = placeLikelihood.getPlace();
-                    if (place.getName() != null && place.getName().toLowerCase().contains("bolsos")) {
+                    if (place.getName() != null && (place.getName().toLowerCase().contains("bolsos")||place.getName().toLowerCase().contains("store")||place.getName().toLowerCase().contains("tienda")||place.getName().toLowerCase().contains("mochila"))) {
                         LatLng placeLatLng = place.getLatLng();
                         mMap.addMarker(new MarkerOptions().position(placeLatLng).title(place.getName()));
                     }

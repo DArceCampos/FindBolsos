@@ -21,6 +21,17 @@ import com.example.appv6.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+
+import java.util.Arrays;
+import java.util.List;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private final int FINE_PERMISSION_CODE=1;
@@ -28,6 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private ActivityMapsBinding binding;
+    private PlacesClient placesClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +51,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        Places.initialize(getApplicationContext(), "AIzaSyDDH1tJ8J4lKjKVapzjPyRLz0f06djNSqs");
+        placesClient = Places.createClient(this);
 
     }
-    private void getLastLocation(){
-
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    private void getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, FINE_PERMISSION_CODE);
             return;
         }
@@ -51,8 +65,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if (location!=null){
-                    currentLocation=location;
+                if (location != null) {
+                    currentLocation = location;
 
                     SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                             .findFragmentById(R.id.map);
@@ -61,32 +75,57 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Ubicación Actual"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(currentLatLng).title("Ubicación Actual"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12));
+
+        // Buscar tiendas de bolsos cercanas
+        findNearbyBagsStores(currentLatLng);
+    }
+
+    private void findNearbyBagsStores(LatLng location) {
+        // Definir los tipos de lugares que queremos buscar (en este caso, tiendas)
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.LAT_LNG);
+
+        // Crear una solicitud para buscar lugares cercanos
+        FindCurrentPlaceRequest request = FindCurrentPlaceRequest.builder(placeFields).build();
+
+        // Verificar permisos de ubicación
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, FINE_PERMISSION_CODE);
+            return;
+        }
+
+        // Realizar la solicitud
+        Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
+        placeResponse.addOnSuccessListener(new OnSuccessListener<FindCurrentPlaceResponse>() {
+            @Override
+            public void onSuccess(FindCurrentPlaceResponse response) {
+                for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+                    Place place = placeLikelihood.getPlace();
+                    if (place.getName() != null && place.getName().toLowerCase().contains("bolsos")) {
+                        LatLng placeLatLng = place.getLatLng();
+                        mMap.addMarker(new MarkerOptions().position(placeLatLng).title(place.getName()));
+                    }
+                }
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(MapsActivity.this, "Error al buscar tiendas cercanas: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults, int deviceId) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId);
-        if (requestCode==FINE_PERMISSION_CODE){
-            if(grantResults.length > 0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == FINE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLastLocation();
-            }else{
+            } else {
                 Toast.makeText(this, "El acceso a su ubicación ha sido denegado", Toast.LENGTH_SHORT).show();
             }
         }

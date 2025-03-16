@@ -1,7 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissions for Waze and general app functionality -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Optional: Camera permission (if your app uses camera features) -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -27,6 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Declare other activities -->
+        <activity android:name=".ReconocimientoActivity" />
+        <activity android:name=".WazeActivity" />
 
     </application>
 

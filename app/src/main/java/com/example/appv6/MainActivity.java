@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 if (id == R.id.nav_reconocimiento) {
                     startActivity(new Intent(MainActivity.this, ReconocimientoActivity.class));
                 } else if (id == R.id.nav_googleMaps) {
-                    startActivity(new Intent(MainActivity.this, GoogleMapsActivity.class));
+                    startActivity(new Intent(MainActivity.this, MapsActivity.class));
                 } else if (id == R.id.nav_waze) {
                     startActivity(new Intent(MainActivity.this, WazeActivity.class));
                 }

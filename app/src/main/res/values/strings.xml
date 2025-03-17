@@ -2,6 +2,6 @@
     <string name="app_name">FindBolsos</string>
     <string name="open_drawer">Abrir menú</string>
     <string name="close_drawer">Cerrar menú</string>
-
+    <string name="search_query">bolsos</string>
 
 </resources>

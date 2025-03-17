@@ -12,19 +12,21 @@ public class WazeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Search for "backpack shops near me"
-        String searchQuery = "backpack shops near me";
-        redirectToWaze(searchQuery);
+        double latitude = 9.8562;
+        double longitude = -83.9109;
+
+        String searchQuery = "tienda de bolsos";
+        redirectToWaze(searchQuery, latitude, longitude, 10000);
     }
 
-    private void redirectToWaze(String query) {
+    private void redirectToWaze(String query, double latitude, double longitude, int radius) {
         try {
-            // Create a URI for the search query
-            String url = "https://waze.com/ul?q=" + Uri.encode(query);
+            String url = "https://waze.com/ul?q=" + Uri.encode(query) +
+                    "&ll=" + latitude + "," + longitude +
+                    "&radius=" + radius;
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {
-            // If Waze is not installed, open the Google Play Store to install Waze
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.waze"));
             startActivity(intent);
         }

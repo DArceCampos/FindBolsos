@@ -1,106 +1,89 @@
-# LogiEvents - Event Management System
+# FindBolsos - Android App
 
 ## 📌 Índice
 1. [Descripción / Description](#descripción--description)
 2. [Tecnologías Utilizadas / Technologies Used](#tecnologías-utilizadas--technologies-used)
 3. [Funcionalidades Principales / Main Features](#funcionalidades-principales--main-features)
 4. [Instalación y Configuración / Installation and Setup](#instalación-y-configuración--installation-and-setup)
-5. [Base de Datos / Database](#base-de-datos--database)
-6. [Uso / Usage](#uso--usage)
-7. [Consideraciones / Considerations](#consideraciones--considerations)
-8. [Licencia / License](#licencia--license)
+5. [Uso / Usage](#uso--usage)
+6. [Consideraciones / Considerations](#consideraciones--considerations)
+7. [Licencia / License](#licencia--license)
 
 ---
 
 ## 📌 Descripción / Description
-**ES:** LogiEvents es una plataforma integral para la gestión de eventos masivos en Centroamérica. Permite a administradores crear y gestionar eventos, controlar el acceso y generar informes, mientras que los usuarios pueden explorar, reservar y confirmar asistencia a los eventos. 
+**ES:** FindBolsos es una aplicación para Android desarrollada en Android Studio que permite a los usuarios identificar bolsos, bultos o loncheras a través del reconocimiento de imágenes y localizar tiendas de bolsos cercanas mediante Google Maps y Waze.
 
-**EN:** LogiEvents is a comprehensive platform for managing large-scale events in Central America. It allows administrators to create and manage events, control access, and generate reports, while users can explore, book, and confirm attendance.
+**EN:** FindBolsos is an Android application developed in Android Studio that allows users to identify handbags, backpacks, or lunch bags through image recognition and locate nearby bag stores using Google Maps and Waze.
 
 ---
 
 ## 📌 Tecnologías Utilizadas / Technologies Used
-- **Backend:** NestJS (Node.js, TypeScript, Fastify/Express)
-- **Frontend Web y Móvil / Web & Mobile Frontend:** React Native
-- **Base de Datos / Database:** MongoDB (Atlas o local / local or Atlas)
+- **Lenguaje de Programación / Programming Language:** Java
+- **Interfaz de Usuario / User Interface:** XML
+- **Entorno de Desarrollo / Development Environment:** Android Studio
+- **APIs Utilizadas / APIs Used:**
+  - Google Maps API
+  - Waze API
+  - Biblioteca de Reconocimiento de Imágenes
+
+---
+
+## 📌 Funcionalidades Principales / Main Features
+- 📷 **Reconocimiento de Bolsos:** Identifica si un objeto en la imagen es un bolso, bulto o lonchera.
+- 🗺️ **Ubicación de Tiendas:** Muestra tiendas de bolsos cercanas en Google Maps.
+- 🚗 **Direcciones en Waze:** Permite abrir direcciones de tiendas en Waze para una navegación fácil.
 
 ---
 
 ## 📌 Instalación y Configuración / Installation and Setup
 ### ⚙️ Requisitos Previos / Prerequisites
-- **Node.js** (v18+)
-- **MongoDB** (Atlas o local / Atlas or local)
-- **Expo CLI** (para React Native / for React Native)
+- **Android Studio** (versión recomendada: 2022+)
+- **Dispositivo o Emulador con Android 8.0+**
+- **Conexión a Internet para APIs**
 
-### 🔧 Backend (NestJS)
+### 🔧 Instalación / Installation
 ```bash
 # Clonar el repositorio / Clone the repository
-git clone https://github.com/tu_usuario/logievents.git
-cd logievents/core
+git clone https://github.com/tu_usuario/findbolsos.git
+cd findbolsos
 
-# Instalar dependencias / Install dependencies
-npm install
-
-# Configurar variables de entorno / Configure environment variables
-cp .env.example .env
-
-# Ejecutar servidor en desarrollo / Run development server
-npm run start:dev
+# Abrir el proyecto en Android Studio / Open project in Android Studio
 ```
 
-### 🔧 Frontend Web & Móvil / Web & Mobile Frontend (React Native)
-```bash
-cd ../client
-
-# Instalar dependencias / Install dependencies
-npm install
-
-# Ejecutar en modo desarrollo / Run in development mode
-npm start
+### 🔧 Configuración de APIs / API Setup
+Para utilizar las funcionalidades de Google Maps y Waze, agrega las claves de API en `AndroidManifest.xml`:
+```xml
+<meta-data
+    android:name="com.google.android.geo.API_KEY"
+    android:value="TU_API_KEY_AQUI" />
 ```
-Para probar en Android, usa / To test on Android, use:
-```bash
-npm run android
-```
----
 
-## 📌 Base de Datos / Database
-El sistema utiliza MongoDB. Configura la conexión en el archivo `.env` del backend:
-```env
-MONGO_URI=mongodb://localhost:27017/logievents
+Para Waze, usa:
+```xml
+<intent-filter>
+    <action android:name="android.intent.action.VIEW" />
+    <data android:scheme="waze" />
+</intent-filter>
 ```
-Para usar MongoDB Atlas, reemplaza `localhost` por la URL de tu instancia en la nube.
-
-The system uses MongoDB. Configure the connection in the `.env` file:
-```env
-MONGO_URI=mongodb://localhost:27017/logievents
-```
-Replace `localhost` with your cloud instance URL if using MongoDB Atlas.
 
 ---
 
 ## 📌 Uso / Usage
-1. **Regístrate e inicia sesión / Register and log in** as a user or administrator.
-2. **Crea y gestiona eventos / Create and manage events** from the admin panel.
-3. **Reserva entradas / Book tickets** as an end user.
-4. **Consulta eventos y estados / View events and statuses** in real time.
-5. **Revisa informes y estadísticas / Review reports and statistics** as an administrator.
+1. **Captura o sube una imagen** para identificar si el objeto es un bolso, bulto o lonchera.
+2. **Explora tiendas cercanas** en Google Maps.
+3. **Navega hacia las tiendas** usando Waze.
 
 ---
 
 ## 📌 Consideraciones / Considerations
-- La web debe estar alojada en un servicio gratuito accesible públicamente.
-- The web app must be hosted on a publicly accessible free service.
-- La app móvil debe ser nativa para Android.
-- The mobile app must be native for Android.
-- La interfaz está diseñada para ser intuitiva para usuarios sin experiencia técnica.
-- The interface is designed to be intuitive for non-technical users.
+- La aplicación requiere permisos de cámara y ubicación.
+- Es necesario contar con conexión a Internet para el uso de Google Maps y Waze.
+- La precisión del reconocimiento de imágenes puede variar según las condiciones de la foto.
 
 ---
 
 ## 📌 Licencia / License
-#### Aunque este es un proyecto educativo y no para fines comerciales, hemos decidido utilizar una licencia para evitar plagio o molestias.
-Este proyecto está licenciado bajo la Licencia MIT 
-
-#### Although this is an educational project and not for business purposes, we have decided to use a license to avoid plagiarism or inconvenience. ####
+Este proyecto está licenciado bajo la Licencia MIT.
 This project is licensed under the MIT License.
+

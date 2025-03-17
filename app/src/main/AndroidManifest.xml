@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Optional: Camera permission (if your app uses camera features) -->
     <uses-feature
         android:name="android.hardware.camera"
@@ -36,7 +36,7 @@
         <!-- Declare other activities -->
         <activity android:name=".ReconocimientoActivity" />
         <activity android:name=".WazeActivity" />
-
+        <activity android:name=".GoogleMapsActivity"/>
     </application>
 
 </manifest>
